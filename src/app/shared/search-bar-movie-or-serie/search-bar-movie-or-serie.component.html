@@ -1,0 +1,6 @@
+<ion-searchbar (ionInput)="getItems($event)" bounced=500></ion-searchbar>
+<ion-list>
+  <ion-item *ngFor="let media of mediaDetails" (click)="getMedia(media)">
+    {{ media.Title }}
+  </ion-item>
+</ion-list>
