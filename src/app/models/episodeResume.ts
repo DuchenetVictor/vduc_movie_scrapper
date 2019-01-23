@@ -1,7 +1,6 @@
 import { episode } from './episode';
-import { searchable } from "./searchable";
 
-export interface episodeResume extends searchable {
+export interface episodeResume {
     Title:        string;
     Season:       string;
     totalSeasons: string;
