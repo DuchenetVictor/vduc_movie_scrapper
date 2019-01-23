@@ -19,6 +19,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initializeItems();
   }
   initializeItems() {
     this.mediaDetails = [];
@@ -42,10 +43,10 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   }
   getMedia(mediaDetail : mediaDetail){
     if (this.mediaType === mediaTypeEnum.movie) {
-      this.router.navigateByUrl("/movie-detail?param=" + mediaDetail.imdbID); //TODO: bonne route ! 
+      this.router.navigateByUrl("/media-details?param=" + mediaDetail.imdbID); //TODO: bonne route ! 
     }
     if (this.mediaType === mediaTypeEnum.serie) {
-      this.router.navigateByUrl("/serie-details?param=" + mediaDetail.imdbID);//TODO bonne route :
+      this.router.navigateByUrl("/media-details?param=" + mediaDetail.imdbID);//TODO bonne route :
     }
   }
 }
