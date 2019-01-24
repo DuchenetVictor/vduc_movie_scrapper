@@ -15,7 +15,7 @@ import { TabsPage } from './tabs.page';
     FormsModule,
     RouterModule.forChild([
       {
-        path: 'tabs',
+        path: '',
         component: TabsPage,
         children: [
           { path: 'movies', loadChildren: '../../pages/movies/movies.module#MoviesPageModule' },
@@ -27,4 +27,4 @@ import { TabsPage } from './tabs.page';
   ],
   declarations: [TabsPage]
 })
-export class TabsPageModule {}
+export class TabsPageModule { }

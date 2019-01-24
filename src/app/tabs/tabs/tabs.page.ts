@@ -7,10 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabsPage implements OnInit {
   constructor(){
-    console.log("chargé");
   }
-
   ngOnInit() {
-    console.log("coucou");
   }
 }
