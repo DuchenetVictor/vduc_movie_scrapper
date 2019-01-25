@@ -1,5 +1,7 @@
 {
   "name": "vduc_movie_scrapper",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
