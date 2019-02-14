@@ -1,14 +1,11 @@
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { StorageServiceService } from './../../services/storage-service.service';
 import { mediaDetail } from './../../models/mediaDetail';
-import { Platform } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { Platform, IonInfiniteScroll } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
 import { RestApiService } from 'src/app/services/rest-api.service';
 import { Location } from '@angular/common';
-import { storageKeyEnum } from 'src/app/models/storageKeyEnum';
-import { empty } from 'rxjs';
 
 
 
@@ -21,13 +18,14 @@ export class MediaDetailsPage implements OnInit {
 
   constructor(private router: Router, private platform: Platform, private restApi: RestApiService, private storage: StorageServiceService, private location: Location) { }
 
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   private imdb: string;
   public media: mediaDetail;
   public seasons: string[];
   public isFavoris: boolean;
 
   ngOnInit() {
-
     this.imdb = this.platform.getQueryParam("param");
 
     this.storage.getFavoris(this.imdb).then(res => {

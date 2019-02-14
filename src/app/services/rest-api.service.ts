@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { mediaTypeEnum } from '../models/mediaTypeEnum';
 import { Observable } from 'rxjs';
-import { stringify } from '@angular/compiler/src/util';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,8 @@ export class RestApiService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getMedias<T>(Title, mediaType: mediaTypeEnum, page?: 1): Observable<T> {
+  getMedias<T>(Title, mediaType: mediaTypeEnum, page? : Number): Observable<T> {
+    if(page === undefined) page = 1;
     return this.httpClient.get<T>(this.baseUrl + this.apiKey + "&s=" + Title + "&page=" + page + "&type=" + mediaType);
   }
 
