@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { mediaTypeEnum } from '../models/mediaTypeEnum';
 import { Observable } from 'rxjs';
+import { stringify } from '@angular/compiler/src/util';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 export class RestApiService {
   private baseUrl = "http://www.omdbapi.com/?apikey=";
   private apiKey = "75522b56";
- 
+
   constructor(private httpClient: HttpClient) { }
 
   getMedias<T>(Title, mediaType: mediaTypeEnum, page?: 1): Observable<T> {
@@ -20,24 +21,32 @@ export class RestApiService {
 
     let seasonSearch: String;
     let episodeSearch: String;
-    ({ seasonSearch, episodeSearch } = newFunction(season, seasonSearch, episode, episodeSearch));
+    ({ seasonSearch, episodeSearch } = this.newFunction(season, episode));
 
-    return this.httpClient.get<T>(this.baseUrl + this.apiKey + "&i=" + imdbID + "&type=" + mediaType + seasonSearch +episodeSearch);
+    return this.httpClient.get<T>(this.baseUrl + this.apiKey + "&i=" + imdbID + "&type=" + mediaType + seasonSearch + episodeSearch);
   }
- 
-}
-function newFunction(season: String, seasonSearch: String, episode: String, episodeSearch: String) {
-  if (season != null) {
-    seasonSearch = "&season=" + season;
+
+  getPoster(imdb: string, high?: Number) {
+    let highSearch: string = high != null ? "?h=" + high : "";
+    return this.httpClient.get("http://img.omdbapi.com/" + this.apiKey + "?i=" + imdb +highSearch);
   }
-  else {
-    seasonSearch = "";
+
+
+  newFunction(season: String, episode: String): any {
+    let seasonSearch: string;
+    let episodeSearch: string;
+    if (season != null) {
+      seasonSearch = "&season=" + season;
+    }
+    else {
+      seasonSearch = "";
+    }
+    if (episode != null) {
+      episodeSearch = "&episode=" + episodeSearch;
+    }
+    else {
+      episodeSearch = "";
+    }
+    return { seasonSearch, episodeSearch };
   }
-  if (episode != null) {
-    episodeSearch = "&episode=" + episodeSearch;
-  }
-  else {
-    episodeSearch = "";
-  }
-  return { seasonSearch, episodeSearch };
 }

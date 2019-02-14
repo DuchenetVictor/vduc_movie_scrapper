@@ -3,7 +3,16 @@
     <ion-title>seasonDetails</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<!--Le titre de l’épisode
+La date de sortie de l’épisode
+La durée de l’épisode
+La description de l’épisode (plot)
+La note IMDb et les nombre de votes IMDb
+-->
 <ion-content padding>
-
+  <ion-list>
+    <ion-item *ngFor="let episode of episodes">
+      <button ion-button block>{{episode.Title}}</button>
+    </ion-item>
+  </ion-list>
 </ion-content>
