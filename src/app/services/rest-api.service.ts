@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class RestApiService {
   private baseUrl = "http://www.omdbapi.com/?apikey=";
+  private baseUrlPoster = "http://img.omdbapi.com/";
   private apiKey = "75522b56";
 
   constructor(private httpClient: HttpClient) { }
@@ -21,18 +22,18 @@ export class RestApiService {
 
     let seasonSearch: String;
     let episodeSearch: String;
-    ({ seasonSearch, episodeSearch } = this.newFunction(season, episode));
+    ({ seasonSearch, episodeSearch } = this.addOptionalRequest(season, episode));
 
     return this.httpClient.get<T>(this.baseUrl + this.apiKey + "&i=" + imdbID + "&type=" + mediaType + seasonSearch + episodeSearch);
   }
 
   getPoster(imdb: string, high?: Number) {
     let highSearch: string = high != null ? "?h=" + high : "";
-    return this.httpClient.get("http://img.omdbapi.com/" + this.apiKey + "?i=" + imdb +highSearch);
+    return this.httpClient.get(this.baseUrlPoster + this.apiKey + "?i=" + imdb +highSearch);
   }
 
 
-  newFunction(season: String, episode: String): any {
+  addOptionalRequest(season: String, episode: String): any {
     let seasonSearch: string;
     let episodeSearch: string;
     if (season != null) {
