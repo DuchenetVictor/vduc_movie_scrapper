@@ -17,7 +17,6 @@ export class StorageServiceService {
   getFavoris(imdb: String): Promise<String> {
     return new Promise((resolve, reject) => {
       this.getFavs().then(res => {
-        console.log("result", res);
         const obj = this.matchObject(res, imdb);
         resolve(obj);
       })

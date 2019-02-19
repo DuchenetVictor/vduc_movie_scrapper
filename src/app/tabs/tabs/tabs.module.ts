@@ -19,7 +19,8 @@ import { TabsPage } from './tabs.page';
         component: TabsPage,
         children: [
           { path: 'movies', loadChildren: '../../pages/movies/movies.module#MoviesPageModule' },
-          { path: 'series', loadChildren: '../../pages/series/series.module#SeriesPageModule' }
+          { path: 'series', loadChildren: '../../pages/series/series.module#SeriesPageModule' },
+          {path:'favorites', loadChildren:'../../pages/favorites/favorites.module#FavoritesPageModule'}
         ]
       }
     ]

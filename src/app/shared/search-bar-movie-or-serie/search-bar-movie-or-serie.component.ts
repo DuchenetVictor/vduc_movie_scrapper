@@ -15,7 +15,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   @Input() mediaType: mediaTypeEnum;
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public mediaDetails: mediaDetail[];
+  public mediaDetails: mediaDetail[] = new Array();
   private actualPageNumber: number;
   private searchValue: String;
   private toggleIfinityScroll: Boolean;
@@ -31,7 +31,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
     this.resetItems();
   }
   resetItems() {
-    this.mediaDetails = null;
+    this.mediaDetails = new Array();
     this.actualPageNumber = 1;
     this.searchValue = '';
     this.toggleIfinityScroll = false;
@@ -55,7 +55,6 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   private setMediaDetails() {
     this.restApiService.getMedias<searchMedia>(this.searchValue, this.mediaType, this.actualPageNumber).subscribe(data => {
       if (data != null) {
-        if (this.mediaDetails === null) this.mediaDetails = new Array();
         this.mediaDetails = this.mediaDetails.concat(data.Search);
 
         if (this.totalResult === 0 || this.totalResult === undefined) {
@@ -75,6 +74,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
     result = Number(result.toFixed());
     return result;
   }
+  
   getMedia(mediaDetail: mediaDetail) {
     this.router.navigateByUrl("/media-details?param=" + mediaDetail.imdbID);
   }
