@@ -17,18 +17,20 @@ export class FavoritesPage implements OnInit {
 
   ngOnInit() {
   }
-  
-  ionViewDidEnter() {  
+
+  ionViewDidEnter() {
     this.setData();
   }
 
   private setData() {
     this.storage.getFavs().then(resultatStorage => {
 
-      resultatStorage = getStorageFavNotDisplaying(resultatStorage);
-      if (resultatStorage !== null || resultatStorage !== undefined) {
-        resultatStorage.forEach((value) => {
+      this.removeDisplayedFavNotInStorage(resultatStorage);
 
+      let favStorageNotDisplayed: String[] = this.getStorageFavNotDisplaying(resultatStorage);
+
+      if (favStorageNotDisplayed !== null && favStorageNotDisplayed !== undefined && favStorageNotDisplayed.length > 0) {
+        resultatStorage.forEach((value) => {
           this.rest.getMedia<mediaDetail>(value).subscribe(res => {
             this.favoris.push(res);
           }, err => {
@@ -45,18 +47,40 @@ export class FavoritesPage implements OnInit {
     this.router.navigateByUrl("/media-details?param=" + mediaDetail.imdbID);
   }
 
-  doRefresh(event: any){
-    
+  doRefresh(event: any) {
+
     setTimeout(() => {
       this.setData();
       event.target.complete();
     }, 2000);
   }
 
-  getStorageFavNotDisplaying(imdbIdStorages: String[]){
-    imdbIdStorages.forEach((value, index)=>{
-      if()
-    })
+  getStorageFavNotDisplaying(imdbIdStorages: String[]): String[] {
+    let imdIdbNotDisplayingYet: String[] = new Array();
 
+    let imdbIdOffFavoris: String[] = new Array();
+    this.favoris.forEach((value) => imdbIdOffFavoris.push(value.imdbID));
+
+    imdbIdStorages.forEach(idBdd => {
+      if (imdbIdOffFavoris.indexOf(idBdd) < 0) {
+        imdIdbNotDisplayingYet.push(idBdd);
+      }
+    })
+    return imdIdbNotDisplayingYet;
+  }
+
+  removeDisplayedFavNotInStorage(favoritesStored: String[]) {
+    if (favoritesStored === null || favoritesStored === undefined || favoritesStored.length <1) {
+      this.favoris = new Array();
+      return;
+    }
+    
+    let favdisplayedToKeep : mediaDetail[] = new Array();
+    for(const fav of this.favoris){
+      if (favoritesStored.indexOf(fav.imdbID) >= 0) {
+        favdisplayedToKeep.push(fav);
+      }
+    }
+    this.favoris =  favdisplayedToKeep;
   }
 }
