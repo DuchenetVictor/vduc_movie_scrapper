@@ -16,9 +16,6 @@ export class FavoritesPage implements OnInit {
   public favoris: mediaDetail[] = new Array();
 
   ngOnInit() {
-  }
-
-  ionViewDidEnter() {
     this.setData();
   }
 
@@ -30,7 +27,7 @@ export class FavoritesPage implements OnInit {
       let favStorageNotDisplayed: String[] = this.getStorageFavNotDisplaying(resultatStorage);
 
       if (favStorageNotDisplayed !== null && favStorageNotDisplayed !== undefined && favStorageNotDisplayed.length > 0) {
-        resultatStorage.forEach((value) => {
+        favStorageNotDisplayed.forEach((value) => {
           this.rest.getMedia<mediaDetail>(value).subscribe(res => {
             this.favoris.push(res);
           }, err => {
