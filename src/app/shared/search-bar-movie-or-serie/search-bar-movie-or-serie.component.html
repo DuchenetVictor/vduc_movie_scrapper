@@ -1,11 +1,13 @@
 <ion-searchbar (ionChange)="getItems($event)" bounced=2600></ion-searchbar>
 
+
 <ion-card (click)="getMedia(media)" *ngFor="let media of mediaDetails">
   <div *ngIf="media">
     <img src="{{media.Poster}}">
     <ion-card-header ngif="media" class="hydrated">
       <ion-card-subtitle role="heading" aria-level="3" class="hydrated">{{media.Year}}</ion-card-subtitle>
-      <ion-card-title role="heading" aria-level="2" class="hydrated" aria-level="2" class="hydrated">{{media.Title}}</ion-card-title>
+      <ion-card-title role="heading" aria-level="2" class="hydrated" aria-level="2" class="hydrated">{{media.Title}}
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content class="card-content hydrated">{{media.Plot}}
     </ion-card-content>
