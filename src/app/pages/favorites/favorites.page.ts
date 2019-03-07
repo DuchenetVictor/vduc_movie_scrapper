@@ -1,12 +1,12 @@
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Router } from '@angular/router';
 import { mediaDetail } from './../../models/mediaDetail';
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
+import { ShareService } from 'src/app/services/share/share.service';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { ModalController, Platform } from '@ionic/angular';
-import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { File } from '@ionic-native/file/ngx';
 import { ToastController } from '@ionic/angular';
 
 
@@ -21,12 +21,7 @@ export class FavoritesPage implements OnInit {
     private storage: StorageService,
     private rest: RestApiService,
     private router: Router,
-    private platform: Platform,
-    private transfer: FileTransfer,
-    private modal: ModalController,
-    private fileChooser: FileChooser,
-    private file: File,
-    private toast: ToastController) { }
+    private share: ShareService) { }
 
   public favoris: mediaDetail[] = new Array();
 
@@ -82,17 +77,30 @@ export class FavoritesPage implements OnInit {
   }
 
   removeDisplayedFavNotInStorage(favoritesStored: String[]) {
-    if (favoritesStored === null || favoritesStored === undefined || favoritesStored.length <1) {
+    if (favoritesStored === null || favoritesStored === undefined || favoritesStored.length < 1) {
       this.favoris = new Array();
       return;
     }
-    
-    let favdisplayedToKeep : mediaDetail[] = new Array();
-    for(const fav of this.favoris){
+
+    let favdisplayedToKeep: mediaDetail[] = new Array();
+    for (const fav of this.favoris) {
       if (favoritesStored.indexOf(fav.imdbID) >= 0) {
         favdisplayedToKeep.push(fav);
       }
     }
-    this.favoris =  favdisplayedToKeep;
+    this.favoris = favdisplayedToKeep;
+  }
+
+  downloadFav() {
+    this.share.ExtractData();
+  }
+
+
+
+
+  uploadFav() {
+    // const fileTransfer: FileTransferObject = this.transfer.create();
+    // fileTransfer.upload().then(console.log("ausecour"))
+
   }
 }

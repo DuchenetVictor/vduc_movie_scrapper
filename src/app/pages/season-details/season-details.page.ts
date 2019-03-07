@@ -1,4 +1,3 @@
-import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
@@ -13,11 +12,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SeasonDetailsPage implements OnInit {
 
-  constructor(private activatedRoute: ActivatedRoute, private restApi: RestApiService) { 
+  constructor(private activatedRoute: ActivatedRoute, private restApi: RestApiService) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.imdb = params["imdb"];
       this.seasonNbr = params["seasonNbr"];
-  });
+    });
   }
 
   private imdb: string;
@@ -26,7 +25,7 @@ export class SeasonDetailsPage implements OnInit {
   public episodes: episode[];
 
   ngOnInit() {
-   
+
 
     this.restApi.getMedia<episodeResume>(this.imdb, mediaTypeEnum.episode, this.seasonNbr).subscribe(
       (res) => {
