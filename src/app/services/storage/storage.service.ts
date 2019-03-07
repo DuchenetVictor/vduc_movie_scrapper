@@ -1,10 +1,10 @@
-import { storageKeyEnum } from './../models/storageKeyEnum';
+import { storageKeyEnum } from '../../models/storageKeyEnum';
 import { Injectable } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 @Injectable({
   providedIn: 'root'
 })
-export class StorageServiceService {
+export class StorageService {
 
   constructor(private nativeStorage: NativeStorage) { }
 

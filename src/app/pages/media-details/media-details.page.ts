@@ -1,10 +1,10 @@
-import { StorageServiceService } from './../../services/storage-service.service';
+import { StorageService } from '../../services/storage/storage.service';
 import { mediaDetail } from './../../models/mediaDetail';
 import { Platform, IonInfiniteScroll } from '@ionic/angular';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
-import { RestApiService } from 'src/app/services/rest-api.service';
+import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { Location } from '@angular/common';
 
 
@@ -16,7 +16,7 @@ import { Location } from '@angular/common';
 })
 export class MediaDetailsPage implements OnInit {
 
-  constructor(private router: Router, private platform: Platform, private restApi: RestApiService, private storage: StorageServiceService, private location: Location) { }
+  constructor(private router: Router, private platform: Platform, private restApi: RestApiService, private storage: StorageService, private location: Location) { }
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 

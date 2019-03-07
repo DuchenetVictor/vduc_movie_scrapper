@@ -1,6 +1,6 @@
 import { IonInfiniteScroll } from '@ionic/angular';
 import { mediaDetail } from './../../models/mediaDetail';
-import { RestApiService } from './../../services/rest-api.service';
+import { RestApiService } from '../../services/rest-api/rest-api.service';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';

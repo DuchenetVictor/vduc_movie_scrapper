@@ -1,8 +1,14 @@
 import { Router } from '@angular/router';
 import { mediaDetail } from './../../models/mediaDetail';
 import { Component, OnInit } from '@angular/core';
-import { StorageServiceService } from 'src/app/services/storage-service.service';
-import { RestApiService } from 'src/app/services/rest-api.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { ModalController, Platform } from '@ionic/angular';
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-favorites',
@@ -11,7 +17,16 @@ import { RestApiService } from 'src/app/services/rest-api.service';
 })
 export class FavoritesPage implements OnInit {
 
-  constructor(private storage: StorageServiceService, private rest: RestApiService, private router: Router) { }
+  constructor(
+    private storage: StorageService,
+    private rest: RestApiService,
+    private router: Router,
+    private platform: Platform,
+    private transfer: FileTransfer,
+    private modal: ModalController,
+    private fileChooser: FileChooser,
+    private file: File,
+    private toast: ToastController) { }
 
   public favoris: mediaDetail[] = new Array();
 

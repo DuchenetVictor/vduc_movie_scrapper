@@ -1,6 +1,6 @@
 import { Platform } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { RestApiService } from 'src/app/services/rest-api.service';
+import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
 import { episodeResume } from 'src/app/models/episodeResume';
 import { episode } from 'src/app/models/episode';

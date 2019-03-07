@@ -1,4 +1,4 @@
-import { mediaTypeEnum } from './../models/mediaTypeEnum';
+import { mediaTypeEnum } from '../../models/mediaTypeEnum';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
