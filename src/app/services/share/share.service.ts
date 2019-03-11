@@ -1,3 +1,4 @@
+import { exportTypeEnum } from './../../models/exportTypeEnum';
 import { Platform } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
@@ -20,7 +21,7 @@ export class ShareService {
   private permissionForReadData: Boolean = false;
   private permissionForWriteData: Boolean = false;
 
-  ExportData() {
+  ExportData( exportType : exportTypeEnum) {
     if (this.platform.is("android")) {
       if (this.permissionForWriteData) {
 
@@ -28,7 +29,7 @@ export class ShareService {
         this.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(granted => {
           this.permissionForWriteData = granted;
           if (granted) {
-            // logique
+           
           }
         });
       }
@@ -59,8 +60,6 @@ export class ShareService {
       }
     }
   }
-
-
 
   private checkPermission(permissionRequired: string): Promise<Boolean> {
     let permissionGranted: Boolean = false;

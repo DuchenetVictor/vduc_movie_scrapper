@@ -32,7 +32,7 @@ Le site web associé à l’élément
   <ion-item>
     {{media.Released}}
   </ion-item>
-  <ion-button (click)="favorisClick(media.imdbID)">
+  <ion-button (click)="favorisClick(media)">
     <ion-icon name="heart" *ngIf="isFavoris"></ion-icon>
     <ion-icon name="heart-empty" *ngIf="!isFavoris"></ion-icon>
   </ion-button>

@@ -28,7 +28,7 @@ export class MediaDetailsPage implements OnInit {
   ngOnInit() {
     this.imdb = this.platform.getQueryParam("param");
 
-    this.storage.getFavoris(this.imdb).then(res => {
+    this.storage.getFavoris(this.media).then(res => {
       if (res === undefined || res === null) {
         this.isFavoris = false;
       } else {
@@ -73,11 +73,11 @@ export class MediaDetailsPage implements OnInit {
     this.location.back();
   }
 
-  favorisClick(imdb: string) {
+  favorisClick(mediaDetail: mediaDetail) {
     if (!this.isFavoris) {
-      this.storage.setFavoris(imdb);
+      this.storage.setFavoris(mediaDetail);
     } else {
-      this.storage.removeFavoris(imdb);
+      this.storage.removeFavoris(mediaDetail);
     }
     this.isFavoris = !this.isFavoris;
   }

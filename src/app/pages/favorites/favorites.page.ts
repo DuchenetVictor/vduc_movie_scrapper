@@ -30,24 +30,24 @@ export class FavoritesPage implements OnInit {
   }
 
   private setData() {
-    this.storage.getFavs().then(resultatStorage => {
+    this.storage.getFavs().then(resultatStorage => this.favoris = resultatStorage);
 
-      this.removeDisplayedFavNotInStorage(resultatStorage);
+      // this.removeDisplayedFavNotInStorage(resultatStorage);
 
-      let favStorageNotDisplayed: String[] = this.getStorageFavNotDisplaying(resultatStorage);
+      // let favStorageNotDisplayed: String[] = this.getStorageFavNotDisplaying(resultatStorage);
 
-      if (favStorageNotDisplayed !== null && favStorageNotDisplayed !== undefined && favStorageNotDisplayed.length > 0) {
-        favStorageNotDisplayed.forEach((value) => {
-          this.rest.getMedia<mediaDetail>(value).subscribe(res => {
-            this.favoris.push(res);
-          }, err => {
-            console.error("Erreur lors de la recuperation des favoris sur l'api", err);
-          });
-        });
-      }
-    }).catch(err => {
-      console.error("Erreur lors de la recuperation des favoris en BDD", err);
-    });
+    //   if (favStorageNotDisplayed !== null && favStorageNotDisplayed !== undefined && favStorageNotDisplayed.length > 0) {
+    //     favStorageNotDisplayed.forEach((value) => {
+    //       this.rest.getMedia<mediaDetail>(value).subscribe(res => {
+    //         this.favoris.push(res);
+    //       }, err => {
+    //         console.error("Erreur lors de la recuperation des favoris sur l'api", err);
+    //       });
+    //     });
+    //   }
+    // }).catch(err => {
+    //   console.error("Erreur lors de la recuperation des favoris en BDD", err);
+    // });
   }
 
   getMedia(mediaDetail: mediaDetail) {
@@ -62,34 +62,34 @@ export class FavoritesPage implements OnInit {
     }, 2000);
   }
 
-  getStorageFavNotDisplaying(imdbIdStorages: String[]): String[] {
-    let imdIdbNotDisplayingYet: String[] = new Array();
+  // getStorageFavNotDisplaying(imdbIdStorages: String[]): String[] {
+  //   let imdIdbNotDisplayingYet: String[] = new Array();
 
-    let imdbIdOffFavoris: String[] = new Array();
-    this.favoris.forEach((value) => imdbIdOffFavoris.push(value.imdbID));
+  //   let imdbIdOffFavoris: String[] = new Array();
+  //   this.favoris.forEach((value) => imdbIdOffFavoris.push(value.imdbID));
 
-    imdbIdStorages.forEach(idBdd => {
-      if (imdbIdOffFavoris.indexOf(idBdd) < 0) {
-        imdIdbNotDisplayingYet.push(idBdd);
-      }
-    })
-    return imdIdbNotDisplayingYet;
-  }
+  //   imdbIdStorages.forEach(idBdd => {
+  //     if (imdbIdOffFavoris.indexOf(idBdd) < 0) {
+  //       imdIdbNotDisplayingYet.push(idBdd);
+  //     }
+  //   })
+  //   return imdIdbNotDisplayingYet;
+  // }
 
-  removeDisplayedFavNotInStorage(favoritesStored: String[]) {
-    if (favoritesStored === null || favoritesStored === undefined || favoritesStored.length < 1) {
-      this.favoris = new Array();
-      return;
-    }
+  // removeDisplayedFavNotInStorage(favoritesStored: String[]) {
+  //   if (favoritesStored === null || favoritesStored === undefined || favoritesStored.length < 1) {
+  //     this.favoris = new Array();
+  //     return;
+  //   }
 
-    let favdisplayedToKeep: mediaDetail[] = new Array();
-    for (const fav of this.favoris) {
-      if (favoritesStored.indexOf(fav.imdbID) >= 0) {
-        favdisplayedToKeep.push(fav);
-      }
-    }
-    this.favoris = favdisplayedToKeep;
-  }
+  //   let favdisplayedToKeep: mediaDetail[] = new Array();
+  //   for (const fav of this.favoris) {
+  //     if (favoritesStored.indexOf(fav.imdbID) >= 0) {
+  //       favdisplayedToKeep.push(fav);
+  //     }
+  //   }
+  //   this.favoris = favdisplayedToKeep;
+  // }
 
   downloadFav() {
     this.share.ExtractData();
@@ -101,6 +101,7 @@ export class FavoritesPage implements OnInit {
   uploadFav() {
     // const fileTransfer: FileTransferObject = this.transfer.create();
     // fileTransfer.upload().then(console.log("ausecour"))
+    this.share.ExportData
 
   }
 }
