@@ -13,6 +13,8 @@ import { searchMedia } from 'src/app/models/searchMedia';
 })
 export class SearchBarMovieOrSerieComponent implements OnInit {
   @Input() mediaType: mediaTypeEnum;
+  @Input() searchBarVisibility: boolean;
+
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public mediaDetails: mediaDetail[] = new Array();

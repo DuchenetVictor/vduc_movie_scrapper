@@ -1,4 +1,4 @@
-<ion-searchbar (ionChange)="getItems($event)" bounced=2600></ion-searchbar>
+<ion-searchbar (ionChange)="getItems($event)" bounced=2600 *ngIf=searchBarVisibility></ion-searchbar>
 
 
 <ion-card (click)="getMedia(media)" *ngFor="let media of mediaDetails">
