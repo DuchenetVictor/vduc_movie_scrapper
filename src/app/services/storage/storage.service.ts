@@ -1,88 +1,155 @@
-import { storageKeyEnum } from '../../models/storageKeyEnum';
 import { Injectable } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { mediaDetail } from 'src/app/models/mediaDetail';
+import { storageKeyEnum } from '../../models/storageKeyEnum';
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  constructor(private nativeStorage: NativeStorage) {}
 
-  constructor(private nativeStorage: NativeStorage) { }
-
-
-  private getItems(storageKeyEnum: storageKeyEnum): Promise<mediaDetail[]> {
+  private getItems(
+    storageKeyEnumForStorage: storageKeyEnum
+  ): Promise<mediaDetail[]> {
     return new Promise((resolve, reject) => {
-      this.nativeStorage.getItem(storageKeyEnum)
-        .then(data => {
-          let mediaDetails: mediaDetail[] = JSON.parse(data);
-          resolve(mediaDetails);
-        })
-        .catch(err => reject(err));
+      this.nativeStorage.getItem(storageKeyEnumForStorage).then(
+        data => {
+          if (
+            data === null ||
+            data === undefined ||
+            data === '[]' ||
+            data.length < 1
+          ) {
+            reject('value returned empty');
+          } else {
+            console.log('data', data);
+            const mediaDetails: mediaDetail[] = data;
+            console.log('getITems', mediaDetails);
+            resolve(mediaDetails);
+          }
+        },
+        error => reject(error)
+      );
     });
   }
 
-
-  getFavoris(mediaDetail: mediaDetail): Promise<mediaDetail> {
+  getFavoris(mediaDetailToFind: mediaDetail): Promise<mediaDetail> {
     return new Promise((resolve, reject) => {
-      this.getFavs().then(res => {
-        const obj = this.matchObject(res, mediaDetail);
-        resolve(obj);
-      })
+      this.getAllFavoris()
+        .then(res => {
+          const mediaDetailFound: mediaDetail = this.matchMediaDetail(
+            res,
+            mediaDetailToFind
+          );
+          console.log('getFavoris', mediaDetailFound);
+          resolve(mediaDetailFound);
+        })
         .catch(err => {
-          console.log("an error", err);
+          console.log('an error', err);
           reject(err);
         });
     });
   }
 
-  getFavs(): Promise<mediaDetail[]> {
+  getAllFavoris(): Promise<mediaDetail[]> {
     return new Promise((resolve, reject) => {
       this.getItems(storageKeyEnum.favoris)
-        .then(res => { resolve(res) })
-        .catch(err => {
-          const emptyValues: mediaDetail[] = new Array();
-          this.nativeStorage.setItem(storageKeyEnum.favoris, emptyValues);
-
+        .then(res => {
+          console.log('getAllFavoris', res);
+          resolve(res);
         })
+        .catch(err => {
+          console.log('getAllFavoris errr ', err);
+          const emptyValues: mediaDetail[] = new Array<mediaDetail>();
+          this.nativeStorage.setItem(storageKeyEnum.favoris, emptyValues).then(
+            res => {
+              console.log('au secoure', res);
+              resolve(emptyValues);
+            },
+            errAddBDD => console.error('au secoure errAddBDD', errAddBDD)
+          );
+          resolve(emptyValues);
+        });
     });
   }
 
-  private matchObject<T>(objsInDatabase: T[], objToFind: T): T {
-    if (objsInDatabase == null || objsInDatabase === undefined) return null;
-
-    let obj: T = null;
-
-    objsInDatabase.map((item) => {
-      if (item === objToFind) {
-        obj = item;
+  private matchMediaDetail(objsInDatabase: mediaDetail[], objToFind: mediaDetail): mediaDetail {
+    if (objsInDatabase === null || objsInDatabase === undefined) {
+      return null;
+    }
+    for (const md of objsInDatabase) {
+      if ( md.imdbID === objToFind.imdbID) {
+        return md;
       }
-    })[0];
-
-    return obj;
+    }
   }
 
-  setFavoris(mediaDetail: mediaDetail) {
-    let searchData: mediaDetail[] = new Array();
-    let mediaDetailFind: Promise<mediaDetail> = this.getFavoris(mediaDetail);
+  setFavoris(mediaDetailToStore: mediaDetail) {
+    const SearchedMediaDetail: Promise<mediaDetail> = this.getFavoris(
+      mediaDetailToStore
+    );
 
-    mediaDetailFind.then(mediaDetailFound => {
-      if (mediaDetailFound !== null || mediaDetailFound !== undefined) {
-        this.getFavs()
+    SearchedMediaDetail.then(mediaDetailFound => {
+      if (mediaDetailFound === null || mediaDetailFound === undefined) {
+        mediaDetailFound = mediaDetailToStore;
+        this.getAllFavoris()
           .then(res => {
-            searchData = res != null ? res : new Array();
-            searchData.push(mediaDetailFound);
-            this.nativeStorage.setItem(storageKeyEnum.favoris, searchData).catch(err => console.error("error when set fav" + err));
-          }).catch(err => console.error("erreur lors de la recuperation des favoris pour l'ajout", err))
+            res.push(mediaDetailFound);
+            this.nativeStorage
+              .setItem(storageKeyEnum.favoris, res)
+              .then(() => console.log('item stored')),
+              err => console.error('error while storing data', err);
+          })
+          .catch(err =>
+            console.error(
+              'erreur lors de la recuperation des favoris pour l\'ajout',
+              err
+            )
+          );
+      } else {
+        console.log('object already in database', mediaDetailFound);
       }
-    }).catch(err => console.error("erreur lors de la recuperation du favoris pour l'ajout", err));
+    }).catch(err =>
+      console.error(
+        'erreur lors de la recuperation du favoris pour l\'ajout',
+        err
+      )
+    );
   }
 
-  removeFavoris(mediaDetail: mediaDetail) {
-    let favs: mediaDetail[] = new Array();
-    this.getFavs().then(res => {
-      favs = res;
-      res.forEach((element, index) => { if (element === mediaDetail) favs.splice(index, 1) });
-      this.nativeStorage.setItem(storageKeyEnum.favoris, favs).catch(err => console.log(err));
-    }, err => console.error("erreur lors de la supression du favoris", err));
+  removeFavoris(mediaDetailToRemove: mediaDetail) {
+    let favs: mediaDetail[] = new Array<mediaDetail>();
+    this.getAllFavoris().then(
+      res => {
+        favs = res;
+        res.forEach((element, index) => {
+          if (element.imdbID === mediaDetailToRemove.imdbID) {
+            favs.splice(index, 1);
+          }
+        });
+        this.nativeStorage
+          .setItem(storageKeyEnum.favoris, favs)
+          .then(
+            () => console.log('remove done'),
+            err => console.error('remove malfunction', err)
+          );
+      },
+      err => console.error('erreur lors de la supression du favoris', err)
+    );
+  }
+
+  findFavByImdbId(imdbIdToFind: string): Promise<mediaDetail> {
+    return new Promise((resolve, reject) =>
+      this.getAllFavoris().then(
+        res => {
+          for (const md of res) {
+            if (md.imdbID === imdbIdToFind) {
+              resolve(md);
+            }
+          }
+        },
+        err => reject(err)
+      )
+    );
   }
 }

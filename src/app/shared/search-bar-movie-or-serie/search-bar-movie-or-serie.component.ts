@@ -1,10 +1,10 @@
-import { IonInfiniteScroll } from '@ionic/angular';
-import { mediaDetail } from './../../models/mediaDetail';
-import { RestApiService } from '../../services/rest-api/rest-api.service';
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonInfiniteScroll } from '@ionic/angular';
 import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
 import { searchMedia } from 'src/app/models/searchMedia';
+import { RestApiService } from '../../services/rest-api/rest-api.service';
+import { mediaDetail } from './../../models/mediaDetail';
 
 @Component({
   selector: 'app-search-bar-movie-or-serie',
@@ -23,7 +23,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   private toggleIfinityScroll: Boolean;
   private totalResult: number;
   private numberPageMax: number;
-  private numberResultByPage: number = 10;
+  private numberResultByPage = 10;
 
   constructor(private router: Router, private restApiService: RestApiService) {
     this.resetItems();
@@ -45,7 +45,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
     this.resetItems();
     this.searchValue = env.target.value;
 
-    if (this.searchValue && this.searchValue.trim() != '') {
+    if (this.searchValue && this.searchValue.trim() !== '') {
       this.setMediaDetails();
       this.toggleIfinityScroll = true;
     } else {
@@ -65,20 +65,20 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
         }
       }
     }, err => {
-      console.log(err);
+      console.error(err);
       this.resetItems();
     });
   }
 
   calculateNbrPageMax(): number {
     let result = this.totalResult / this.numberResultByPage;
-    //get round number
+    // get round number
     result = Number(result.toFixed());
     return result;
   }
-  
+
   getMedia(mediaDetail: mediaDetail) {
-    this.router.navigateByUrl("/media-details?param=" + mediaDetail.imdbID);
+    this.router.navigateByUrl('/media-details?param=' + mediaDetail.imdbID);
   }
 
   loadData(event) {

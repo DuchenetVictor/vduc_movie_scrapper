@@ -30,7 +30,7 @@ export class FavoritesPage implements OnInit {
   }
 
   private setData() {
-    this.storage.getFavs().then(resultatStorage => this.favoris = resultatStorage);
+    this.storage.getAllFavoris().then(resultatStorage => this.favoris = resultatStorage);
 
       // this.removeDisplayedFavNotInStorage(resultatStorage);
 

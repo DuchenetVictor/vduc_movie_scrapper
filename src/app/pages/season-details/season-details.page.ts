@@ -33,7 +33,7 @@ export class SeasonDetailsPage implements OnInit {
         this.episodes = res.Episodes;
       },
       (err) => {
-        console.log(err);
+        console.error(err);
       }
     )
   }

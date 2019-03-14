@@ -21,15 +21,15 @@ export class ShareService {
   private permissionForReadData: Boolean = false;
   private permissionForWriteData: Boolean = false;
 
-  ExportData( exportType : exportTypeEnum) {
-    if (this.platform.is("android")) {
+  ExportData( exportType: exportTypeEnum) {
+    if (this.platform.is('android')) {
       if (this.permissionForWriteData) {
 
       } else {
         this.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(granted => {
           this.permissionForWriteData = granted;
           if (granted) {
-           
+
           }
         });
       }
@@ -37,12 +37,12 @@ export class ShareService {
   }
 
   ExtractData() {
-    if (this.platform.is("android")) {
+    if (this.platform.is('android')) {
       if (this.permissionForReadData) {
 
         this.fileChooser.open().then(
           filePath => {
-            this.fileToText(filePath).then(res => console.log(res + "permisssion already ok "));
+            this.fileToText(filePath).then(res => console.log(res + 'permisssion already ok '));
           }
         ).catch(err => console.error(err));
 
@@ -52,7 +52,7 @@ export class ShareService {
           if (granted) {
             this.fileChooser.open().then(
               filePath => {
-                this.fileToText(filePath).then(res => console.log(res + "permisssion granted"));
+                this.fileToText(filePath).then(res => console.log(res + 'permisssion granted'));
               }
             ).catch(err => console.error(err));
           }
@@ -66,7 +66,7 @@ export class ShareService {
     return this.androidPermissions.checkPermission(permissionRequired).then(
       have => {
         if (have.hasPermission) {
-          console.log("permission of" + permissionRequired + " already granted -> " + have.hasPermission);
+          console.log('permission of' + permissionRequired + ' already granted -> ' + have.hasPermission);
           permissionGranted = true;
         } else {
           return this.askPermission(permissionRequired);
@@ -109,10 +109,10 @@ export class ShareService {
   }
 
   private getDirectoryFromPath(filePath: string): string {
-    return filePath.substring(0, filePath.lastIndexOf("/"));
+    return filePath.substring(0, filePath.lastIndexOf('/'));
   }
 
   private getFileNameFromPath(filePath: string): string {
-    return filePath.substring(filePath.lastIndexOf("/") + 1, filePath.length);
+    return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length);
   }
 }
