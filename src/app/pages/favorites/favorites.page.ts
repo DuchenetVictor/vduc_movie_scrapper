@@ -14,7 +14,6 @@ import { mediaDetail } from './../../models/mediaDetail';
 export class FavoritesPage implements OnInit {
   constructor(
     private storage: StorageService,
-    private rest: RestApiService,
     private router: Router,
     private share: ShareService
   ) {}
@@ -32,7 +31,9 @@ export class FavoritesPage implements OnInit {
   }
 
   getMedia(mediaDetailClicked: mediaDetail) {
-    this.router.navigateByUrl('/media-details?param=' + mediaDetailClicked.imdbID);
+    this.router.navigateByUrl(
+      '/media-details?param=' + mediaDetailClicked.imdbID
+    );
   }
 
   doRefresh(event: any) {
@@ -43,7 +44,12 @@ export class FavoritesPage implements OnInit {
   }
 
   downloadFav() {
-    this.share.ExtractData();
+    this.share.ExtractData<mediaDetail>().then(
+      res => {
+        res.forEach(fav => this.favoris.push(fav));
+      },
+      err => console.error(err)
+    );
   }
 
   uploadFav() {

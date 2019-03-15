@@ -1,14 +1,12 @@
-import { ExportedCompilerFacade } from '@angular/compiler/src/compiler_facade_interface';
-import { exportTypeEnum } from './../../models/exportTypeEnum';
-import { Platform } from '@ionic/angular';
+import { mediaDetail } from 'src/app/models/mediaDetail';
 import { Injectable } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { File } from '@ionic-native/file/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
+import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { ngxCsv } from 'ngx-csv/ngx-csv';
-import { ResolveEnd } from '@angular/router';
+import { Platform } from '@ionic/angular';
+import { exportTypeEnum } from './../../models/exportTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +41,67 @@ export class ShareService {
     }
   }
 
+  ExtractData<T>(): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      if (this.platform.is('android')) {
+        if (this.permissionForReadData) {
+          this.chooseFileAndExtractToObj<T>().then(res => {
+            if (res !== null && res.length > 0) {
+              console.log(' parsing json reussi ', res);
+              resolve(res);
+            } else {
+              reject("le parsing en json n'a pas marché");
+            }
+          });
+        } else {
+          this.checkPermission(
+            this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
+          ).then(granted => {
+            this.permissionForReadData = granted;
+            if (granted) {
+              this.chooseFileAndExtractToObj<T>().then(res => {
+                if (res !== null && res.length > 0) {
+                  console.log(' parsing json reussi ', res);
+                  resolve(res);
+                } else {
+                  reject("le parsing en json n'a pas marché");
+                }
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+  private chooseFileAndExtractToObj<T>(): Promise<T[]> {
+    return new Promise((resolve, reject) => {
+      this.fileChooser
+        .open()
+        .then(filePath => {
+          this.fileToText(filePath).then(res =>
+            resolve(this.tryExtractJson(res))
+          );
+        })
+        .catch(err => reject(err));
+    });
+  }
+
+  private tryExtractJson<T>(textExtracted: string): T[] {
+    let ts: T[] = JSON.parse(textExtracted);
+
+    if (ts !== null || ts !== undefined) {
+      return ts;
+    }
+
+    const t: T = JSON.parse(textExtracted);
+    if (t !== null || t !== undefined) {
+      ts = [];
+      ts.push(t);
+      return ts;
+    }
+    return null;
+  }
+
   private sendFavoris<T>(data: T, exportType: exportTypeEnum) {
     this.createFile(data, exportType).then(nativUrl => {
       this.socialSharing
@@ -50,37 +109,6 @@ export class ShareService {
         .then(res => console.log(res))
         .catch(err => console.error(err));
     });
-  }
-
-  ExtractData() {
-    if (this.platform.is('android')) {
-      if (this.permissionForReadData) {
-        this.fileChooser
-          .open()
-          .then(filePath => {
-            this.fileToText(filePath).then(res =>
-              console.log(res + 'permisssion already ok ')
-            );
-          })
-          .catch(err => console.error(err));
-      } else {
-        this.checkPermission(
-          this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE
-        ).then(granted => {
-          this.permissionForReadData = granted;
-          if (granted) {
-            this.fileChooser
-              .open()
-              .then(filePath => {
-                this.fileToText(filePath).then(res =>
-                  console.log(res + 'permisssion granted')
-                );
-              })
-              .catch(err => console.error(err));
-          }
-        });
-      }
-    }
   }
 
   private checkPermission(permissionRequired: string): Promise<Boolean> {
@@ -120,7 +148,7 @@ export class ShareService {
     );
   }
 
-  private fileToText(filepath: string): Promise<String> {
+  private fileToText(filepath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       this.filePath
         .resolveNativePath(filepath)
