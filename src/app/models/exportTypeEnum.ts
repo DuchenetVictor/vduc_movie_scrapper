@@ -1,3 +1,3 @@
-export enum exportTypeEnum{
-    CSV, JSON
-} 
+export enum ExportTypeEnum {
+    CSV= 'csv', JSON= 'json'
+}

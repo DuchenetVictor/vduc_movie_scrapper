@@ -1,9 +1,9 @@
-import { episode } from './episode';
+import { Episode } from './episode';
 
-export interface episodeResume {
+export interface EpisodeResume {
     Title:        string;
     Season:       string;
     totalSeasons: string;
-    Episodes:     episode[];
+    Episodes:     Episode[];
     Response:     string;
 }

@@ -1,3 +1,3 @@
-export enum storageKeyEnum{
-favoris="favoris"
+export enum StorageKeyEnum {
+favoris= 'favoris'
 }

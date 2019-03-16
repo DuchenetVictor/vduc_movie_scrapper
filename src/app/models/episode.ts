@@ -1,4 +1,4 @@
-export interface episode {
+export interface Episode {
     Title:      string;
     Released:   string;
     Episode:    string;

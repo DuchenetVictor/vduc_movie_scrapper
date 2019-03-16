@@ -1,6 +1,6 @@
-import { mediaDetail } from './mediaDetail';
+import { MediaDetail } from './mediaDetail';
 
-export interface searchMedia{
-    Search : mediaDetail[] ;
+export interface SearchMedia{
+    Search: MediaDetail[] ;
     totalResults: string;
 }
