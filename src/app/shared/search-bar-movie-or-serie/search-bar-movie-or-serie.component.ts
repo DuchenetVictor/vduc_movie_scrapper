@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
-import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
-import { searchMedia } from 'src/app/models/searchMedia';
+import { MediaTypeEnum } from 'src/app/models/mediaTypeEnum';
+import { SearchMedia } from 'src/app/models/searchMedia';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
-import { mediaDetail } from './../../models/mediaDetail';
+import { MediaDetail } from './../../models/mediaDetail';
 
 @Component({
   selector: 'app-search-bar-movie-or-serie',
@@ -12,12 +12,12 @@ import { mediaDetail } from './../../models/mediaDetail';
   styleUrls: ['./search-bar-movie-or-serie.component.scss']
 })
 export class SearchBarMovieOrSerieComponent implements OnInit {
-  @Input() mediaType: mediaTypeEnum;
+  @Input() mediaType: MediaTypeEnum;
   @Input() searchBarVisibility: boolean;
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public mediaDetails: mediaDetail[] = new Array();
+  public mediaDetails: MediaDetail[] = new Array();
   private actualPageNumber: number;
   private searchValue: String;
   private toggleIfinityScroll: Boolean;
@@ -55,7 +55,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
   }
 
   private setMediaDetails() {
-    this.restApiService.getMedias<searchMedia>(this.searchValue, this.mediaType, this.actualPageNumber).subscribe(data => {
+    this.restApiService.getMedias<SearchMedia>(this.searchValue, this.mediaType, this.actualPageNumber).subscribe(data => {
       if (data != null) {
         this.mediaDetails = this.mediaDetails.concat(data.Search);
 
@@ -77,7 +77,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
     return result;
   }
 
-  getMedia(mediaDetail: mediaDetail) {
+  getMedia(mediaDetail: MediaDetail) {
     this.router.navigateByUrl('/media-details?param=' + mediaDetail.imdbID);
   }
 
@@ -90,7 +90,7 @@ export class SearchBarMovieOrSerieComponent implements OnInit {
 
       // App logic to determine if all data is loaded
       // and disable the infinite scroll
-      if (this.actualPageNumber == this.numberPageMax) {
+      if (this.actualPageNumber === this.numberPageMax) {
         event.target.disabled = true;
       }
     }, 500);

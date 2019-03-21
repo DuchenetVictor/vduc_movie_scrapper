@@ -2,10 +2,10 @@ import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { IonInfiniteScroll, Platform } from '@ionic/angular';
-import { mediaTypeEnum } from 'src/app/models/mediaTypeEnum';
+import { MediaTypeEnum } from 'src/app/models/mediaTypeEnum';
 import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { StorageService } from '../../services/storage/storage.service';
-import { mediaDetail } from './../../models/mediaDetail';
+import { MediaDetail } from './../../models/mediaDetail';
 
 @Component({
   selector: 'app-media-details',
@@ -24,7 +24,7 @@ export class MediaDetailsPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   private imdb: string;
-  public media: mediaDetail;
+  public media: MediaDetail;
   public seasons: string[];
   public isFavoris: boolean;
 
@@ -32,7 +32,7 @@ export class MediaDetailsPage implements OnInit {
     this.imdb = this.platform.getQueryParam('param');
 
     this.restApi
-      .getMedia<mediaDetail>(this.imdb, mediaTypeEnum.serie)
+      .getMedia<MediaDetail>(this.imdb, MediaTypeEnum.serie)
       .subscribe(
         mediaDetailFromRest => {
           this.setMediaDetail(mediaDetailFromRest);
@@ -44,7 +44,7 @@ export class MediaDetailsPage implements OnInit {
       );
   }
 
-  private setFavorisButton(mDetail: mediaDetail) {
+  private setFavorisButton(mDetail: MediaDetail) {
     this.storage
       .getFavoris(mDetail)
       .then(res => {
@@ -60,7 +60,7 @@ export class MediaDetailsPage implements OnInit {
       });
   }
 
-  private setMediaDetail(mediaDetailFound: mediaDetail) {
+  private setMediaDetail(mediaDetailFound: MediaDetail) {
     if (mediaDetailFound != null) {
       this.media = mediaDetailFound;
       if (mediaDetailFound.totalSeasons != null) {
@@ -94,7 +94,7 @@ export class MediaDetailsPage implements OnInit {
     this.location.back();
   }
 
-  favorisClick(mediaDetailToStore: mediaDetail) {
+  favorisClick(mediaDetailToStore: MediaDetail) {
     if (!this.isFavoris) {
       this.storage.setFavoris(mediaDetailToStore);
     } else {

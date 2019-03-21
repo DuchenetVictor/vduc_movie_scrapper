@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { mediaDetail } from 'src/app/models/mediaDetail';
-import { storageKeyEnum } from '../../models/storageKeyEnum';
+import { MediaDetail } from 'src/app/models/mediaDetail';
+import { StorageKeyEnum } from '../../models/storageKeyEnum';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,8 +9,8 @@ export class StorageService {
   constructor(private nativeStorage: NativeStorage) {}
 
   private getItems(
-    storageKeyEnumForStorage: storageKeyEnum
-  ): Promise<mediaDetail[]> {
+    storageKeyEnumForStorage: StorageKeyEnum
+  ): Promise<MediaDetail[]> {
     return new Promise((resolve, reject) => {
       this.nativeStorage.getItem(storageKeyEnumForStorage).then(
         data => {
@@ -23,7 +23,7 @@ export class StorageService {
             reject('value returned empty');
           } else {
             console.log('data', data);
-            const mediaDetails: mediaDetail[] = data;
+            const mediaDetails: MediaDetail[] = data;
             console.log('getITems', mediaDetails);
             resolve(mediaDetails);
           }
@@ -33,11 +33,11 @@ export class StorageService {
     });
   }
 
-  getFavoris(mediaDetailToFind: mediaDetail): Promise<mediaDetail> {
+  getFavoris(mediaDetailToFind: MediaDetail): Promise<MediaDetail> {
     return new Promise((resolve, reject) => {
       this.getAllFavoris()
         .then(res => {
-          const mediaDetailFound: mediaDetail = this.matchMediaDetail(
+          const mediaDetailFound: MediaDetail = this.matchMediaDetail(
             res,
             mediaDetailToFind
           );
@@ -51,17 +51,17 @@ export class StorageService {
     });
   }
 
-  getAllFavoris(): Promise<mediaDetail[]> {
+  getAllFavoris(): Promise<MediaDetail[]> {
     return new Promise((resolve, reject) => {
-      this.getItems(storageKeyEnum.favoris)
+      this.getItems(StorageKeyEnum.favoris)
         .then(res => {
           console.log('getAllFavoris', res);
           resolve(res);
         })
         .catch(err => {
           console.log('getAllFavoris errr ', err);
-          const emptyValues: mediaDetail[] = new Array<mediaDetail>();
-          this.nativeStorage.setItem(storageKeyEnum.favoris, emptyValues).then(
+          const emptyValues: MediaDetail[] = new Array<MediaDetail>();
+          this.nativeStorage.setItem(StorageKeyEnum.favoris, emptyValues).then(
             res => {
               console.log('au secoure', res);
               resolve(emptyValues);
@@ -73,19 +73,22 @@ export class StorageService {
     });
   }
 
-  private matchMediaDetail(objsInDatabase: mediaDetail[], objToFind: mediaDetail): mediaDetail {
+  private matchMediaDetail(
+    objsInDatabase: MediaDetail[],
+    objToFind: MediaDetail
+  ): MediaDetail {
     if (objsInDatabase === null || objsInDatabase === undefined) {
       return null;
     }
     for (const md of objsInDatabase) {
-      if ( md.imdbID === objToFind.imdbID) {
+      if (md.imdbID === objToFind.imdbID) {
         return md;
       }
     }
   }
 
-  setFavoris(mediaDetailToStore: mediaDetail) {
-    const SearchedMediaDetail: Promise<mediaDetail> = this.getFavoris(
+  setFavoris(mediaDetailToStore: MediaDetail) {
+    const SearchedMediaDetail: Promise<MediaDetail> = this.getFavoris(
       mediaDetailToStore
     );
 
@@ -96,7 +99,7 @@ export class StorageService {
           .then(res => {
             res.push(mediaDetailFound);
             this.nativeStorage
-              .setItem(storageKeyEnum.favoris, res)
+              .setItem(StorageKeyEnum.favoris, res)
               .then(() => console.log('item stored')),
               err => console.error('error while storing data', err);
           })
@@ -117,8 +120,8 @@ export class StorageService {
     );
   }
 
-  removeFavoris(mediaDetailToRemove: mediaDetail) {
-    let favs: mediaDetail[] = new Array<mediaDetail>();
+  removeFavoris(mediaDetailToRemove: MediaDetail) {
+    let favs: MediaDetail[] = new Array<MediaDetail>();
     this.getAllFavoris().then(
       res => {
         favs = res;
@@ -128,7 +131,7 @@ export class StorageService {
           }
         });
         this.nativeStorage
-          .setItem(storageKeyEnum.favoris, favs)
+          .setItem(StorageKeyEnum.favoris, favs)
           .then(
             () => console.log('remove done'),
             err => console.error('remove malfunction', err)
@@ -138,7 +141,7 @@ export class StorageService {
     );
   }
 
-  findFavByImdbId(imdbIdToFind: string): Promise<mediaDetail> {
+  findFavByImdbId(imdbIdToFind: string): Promise<MediaDetail> {
     return new Promise((resolve, reject) =>
       this.getAllFavoris().then(
         res => {
@@ -151,5 +154,15 @@ export class StorageService {
         err => reject(err)
       )
     );
+  }
+
+  removeAllFavoris() {
+    const mediaDetailEmpty: MediaDetail[] = [];
+    this.nativeStorage
+      .setItem(StorageKeyEnum.favoris, mediaDetailEmpty)
+      .then(
+        () => console.log('remove all fav done'),
+        err => console.error(err)
+      );
   }
 }

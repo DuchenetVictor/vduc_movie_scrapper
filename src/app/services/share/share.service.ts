@@ -1,4 +1,3 @@
-import { mediaDetail } from 'src/app/models/mediaDetail';
 import { Injectable } from '@angular/core';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
@@ -6,7 +5,7 @@ import { FilePath } from '@ionic-native/file-path/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Platform } from '@ionic/angular';
-import { exportTypeEnum } from './../../models/exportTypeEnum';
+import { ExportTypeEnum } from './../../models/exportTypeEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,7 @@ export class ShareService {
   private permissionForReadData: Boolean = false;
   private permissionForWriteData: Boolean = false;
 
-  ExportData<T>(data: T, exportType: exportTypeEnum) {
+  ExportData<T>(data: T, exportType: ExportTypeEnum) {
     if (this.platform.is('android')) {
       if (this.permissionForWriteData) {
         this.sendFavoris(data, exportType);
@@ -50,7 +49,7 @@ export class ShareService {
               console.log(' parsing json reussi ', res);
               resolve(res);
             } else {
-              reject("le parsing en json n'a pas marché");
+              reject('le parsing en json n\'a pas marché');
             }
           });
         } else {
@@ -64,7 +63,7 @@ export class ShareService {
                   console.log(' parsing json reussi ', res);
                   resolve(res);
                 } else {
-                  reject("le parsing en json n'a pas marché");
+                  reject('le parsing en json n\'a pas marché');
                 }
               });
             }
@@ -102,7 +101,7 @@ export class ShareService {
     return null;
   }
 
-  private sendFavoris<T>(data: T, exportType: exportTypeEnum) {
+  private sendFavoris<T>(data: T, exportType: ExportTypeEnum) {
     this.createFile(data, exportType).then(nativUrl => {
       this.socialSharing
         .share('favoris', null, nativUrl)
@@ -174,12 +173,12 @@ export class ShareService {
     return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length);
   }
 
-  private createFile<T>(data: T, exportType: exportTypeEnum): Promise<string> {
+  private createFile<T>(data: T, exportType: ExportTypeEnum): Promise<string> {
     return new Promise((resolve, reject) => {
       let filename = 'temp';
 
       let dataParsed: string;
-      if (exportType === exportTypeEnum.CSV) {
+      if (exportType === ExportTypeEnum.CSV) {
         filename = filename.concat('.csv');
         // const csv : ngxCsv = new ngxCsv(data, 'exportFavoris', { noDownload : true});
         // console.log(csv);
@@ -188,7 +187,7 @@ export class ShareService {
         // return csv;
       }
 
-      if (exportType === exportTypeEnum.JSON) {
+      if (exportType === ExportTypeEnum.JSON) {
         filename = filename.concat('.json');
         dataParsed = JSON.stringify(data);
       }
