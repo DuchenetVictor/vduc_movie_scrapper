@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-button (click)="comeBack()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-button>
     <ion-title>seasonDetails</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,7 +14,7 @@ La note IMDb et les nombre de votes IMDb
 -->
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let episode of episodes">
+    <ion-item *ngFor="let episode of episodes" (click)="showEpisode(episode)">
       <button ion-button block>{{episode.Title}}</button>
     </ion-item>
   </ion-list>

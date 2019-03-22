@@ -1,7 +1,10 @@
-<ion-searchbar (ionChange)="getItems($event)" bounced=2600 *ngIf=searchBarVisibility></ion-searchbar>
+<ion-searchbar
+  (ionChange)="getItems($event)"
+  bounced="2600"
+  *ngIf="searchBarVisibility"
+></ion-searchbar>
 
-
-<ion-card (click)="getMedia(media)" *ngFor="let media of mediaDetails">
+<!-- <ion-card (click)="getMedia(media)" *ngFor="let media of mediaDetails">
   <div *ngIf="media">
     <img src="{{media.Poster}}">
     <ion-card-header ngif="media" class="hydrated">
@@ -12,10 +15,37 @@
     <ion-card-content class="card-content hydrated">{{media.Plot}}
     </ion-card-content>
   </div>
-</ion-card>
-
+</ion-card> -->
+<ion-grid>
+  <ion-col size="2" *ngFor="let media of mediaDetails">
+    <ion-card (click)="getMedia(media)">
+      <img src="{{ media.Poster }}" />
+      <ion-card-content>
+        <ion-row no-padding>
+          <ion-col col-3 text-center>
+            <p class="year">
+              {{ media.Year }}
+            </p>
+            <p class="day">
+              {{ media.Rated }}
+            </p>
+          </ion-col>
+          <ion-col class="event-name">
+            {{ media.Title }}
+            <p class="event-location">
+              {{ media.Genre }}
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-grid>
 
 <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
-  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+  <ion-infinite-scroll-content
+    loadingSpinner="bubbles"
+    loadingText="Loading more data..."
+  >
   </ion-infinite-scroll-content>
 </ion-infinite-scroll>

@@ -5,7 +5,6 @@
   <ion-toolbar>
     <ion-title>mediaDetails</ion-title>
   </ion-toolbar>
-
 </ion-header>
 
 <!--Le titre de l’élément
@@ -21,25 +20,48 @@ Les prix et nominations que l’élément a obtenus
 La note IMDb ainsi que le nombre total de votes IMDb
 Le site web associé à l’élément
 -->
-<ion-content padding>
-
-  <!-- <ion-item>
-    {{media.Title}}
-  </ion-item> -->
-<!--  <ion-item>
-    {{media.Plot}}
-  </ion-item>-->
-  <ion-item *ngIf="media">
-    {{media.Released}}
+<ion-content padding *ngIf="media">
+  <ion-item>
+    {{ media.Title }}
   </ion-item>
+  <ion-item>
+    {{ media.Plot }}
+  </ion-item>
+  <ion-item>
+    {{ media.Released }}
+  </ion-item>
+  <ion-item>
+    {{ media.Rated }}
+  </ion-item>
+  <ion-item>
+    {{ media.Genre }}
+  </ion-item>
+  <ion-item>
+    {{ media.Production }}
+  </ion-item>
+  <ion-item>
+    {{ media.Actors }}
+  </ion-item>
+  <ion-item>
+    {{ media.Awards }}
+  </ion-item>
+  <ion-item>
+      {{ media.imdbRating }}
+    </ion-item>  <ion-item>
+        {{ media.imdbVotes }}
+      </ion-item>  <ion-item>
+          {{ media.Website }}
+        </ion-item>  <ion-item>
+            {{ media.Runtime }}
+          </ion-item>
   <ion-button (click)="favorisClick(media)">
     <ion-icon name="heart" *ngIf="isFavoris"></ion-icon>
     <ion-icon name="heart-empty" *ngIf="!isFavoris"></ion-icon>
   </ion-button>
-   
+
   <ion-list>
     <ion-item *ngFor="let season of seasons" (click)="buttonClick(season)">
-      <button ion-button block>saison {{season}}</button>
+      <button ion-button block>saison {{ season }}</button>
     </ion-item>
   </ion-list>
 </ion-content>
