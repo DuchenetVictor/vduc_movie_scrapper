@@ -3,24 +3,13 @@
     <ion-icon name="arrow-back"></ion-icon>
   </ion-button>
   <ion-toolbar>
-    <ion-title>mediaDetails</ion-title>
+    <ion-title *ngIf="media">{{media.Title}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<!--Le titre de l’élément
-L’année de sortie
-Les recommandation d’âge (R, PG-12, PEGI-16, …)
-Le poster
-La description longue (full plot)
-Le genre de l’élément
-La durée du film si l’élément est un film
-Le producteur
-La liste des acteurs
-Les prix et nominations que l’élément a obtenus
-La note IMDb ainsi que le nombre total de votes IMDb
-Le site web associé à l’élément
--->
+
 <ion-content padding *ngIf="media">
+  <ion-img [src]="linkPoster"></ion-img>
   <ion-item>
     {{ media.Title }}
   </ion-item>
@@ -46,14 +35,15 @@ Le site web associé à l’élément
     {{ media.Awards }}
   </ion-item>
   <ion-item>
-      {{ media.imdbRating }}
-    </ion-item>  <ion-item>
-        {{ media.imdbVotes }}
-      </ion-item>  <ion-item>
-          {{ media.Website }}
-        </ion-item>  <ion-item>
-            {{ media.Runtime }}
-          </ion-item>
+    {{ media.imdbRating }}
+  </ion-item>
+  <ion-item>
+    {{ media.imdbVotes }}
+  </ion-item>
+  <a href="{{ media.Website }}">{{ media.Website }}</a>
+  <ion-item>
+    {{ media.Runtime }}
+  </ion-item>
   <ion-button (click)="favorisClick(media)">
     <ion-icon name="heart" *ngIf="isFavoris"></ion-icon>
     <ion-icon name="heart-empty" *ngIf="!isFavoris"></ion-icon>

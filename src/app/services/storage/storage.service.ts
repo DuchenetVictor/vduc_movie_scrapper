@@ -7,7 +7,6 @@ import { StorageKeyEnum } from '../../models/storageKeyEnum';
 })
 export class StorageService {
   constructor(private nativeStorage: NativeStorage) {}
-
   private getItems(
     storageKeyEnumForStorage: StorageKeyEnum
   ): Promise<MediaDetail[]> {

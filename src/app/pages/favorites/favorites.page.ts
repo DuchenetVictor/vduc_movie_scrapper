@@ -60,7 +60,7 @@ export class FavoritesPage implements OnInit {
   downloadFav() {
     this.actionSheetController
       .create({
-        header: " type d'export ",
+        header: ' type d\'export ',
         buttons: [
           {
             text: 'Annulé',

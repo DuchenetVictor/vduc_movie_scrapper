@@ -6,6 +6,7 @@ import { MediaTypeEnum } from 'src/app/models/mediaTypeEnum';
 import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { StorageService } from '../../services/storage/storage.service';
 import { MediaDetail } from './../../models/mediaDetail';
+import { PlotEnum } from 'src/app/models/plotEnum';
 
 @Component({
   selector: 'app-media-details',
@@ -27,12 +28,13 @@ export class MediaDetailsPage implements OnInit {
   public media: MediaDetail;
   public seasons: string[];
   public isFavoris: boolean;
+  public linkPoster: String;
 
   ngOnInit() {
     this.imdb = this.platform.getQueryParam('param');
 
     this.restApi
-      .getMedia<MediaDetail>(this.imdb, MediaTypeEnum.serie)
+      .getMedia<MediaDetail>(this.imdb, MediaTypeEnum.serie, null, null, PlotEnum.full)
       .subscribe(
         mediaDetailFromRest => {
           this.setMediaDetail(mediaDetailFromRest);
@@ -42,6 +44,7 @@ export class MediaDetailsPage implements OnInit {
           console.log(err);
         }
       );
+    this.linkPoster = this.restApi.getposterLink(this.imdb, '1000');
   }
 
   private setFavorisButton(mDetail: MediaDetail) {
@@ -69,6 +72,10 @@ export class MediaDetailsPage implements OnInit {
         );
       }
     }
+  }
+
+  test(imdbID: string) {
+    this.restApi.getPoster(imdbID).subscribe(rest => {});
   }
 
   transformeSeasonNbrIntoArray(seasonNbr: string): string[] {
