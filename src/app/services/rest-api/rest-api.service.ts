@@ -51,13 +51,9 @@ export class RestApiService {
     let seasonSearch: String;
     let episodeSearch: String;
     let mediaTypeSearch: MediaTypeEnum;
-    let plotSearch: String;
+    let plotSearch: string;
     ({
-      seasonSearch,
-      episodeSearch,
-      mediaTypeSearch,
-      plotSearch
-    } = this.addOptionalRequest(season, episode, mediaType, plot));
+      seasonSearch, episodeSearch, mediaTypeSearch, plotSearch} = this.addOptionalRequest(season, episode, mediaType, plot));
     console.log(plotSearch);
     return this.httpClient.get<T>(
       this.baseUrl +
@@ -87,7 +83,7 @@ export class RestApiService {
     let seasonSearch: string;
     let episodeSearch: string;
     let mediaTypeSearch: String;
-    let plot: String;
+    let plotSearch: string;
 
     seasonSearch = season != null ? (seasonSearch = '&season=' + season) : '';
 
@@ -95,11 +91,12 @@ export class RestApiService {
 
     mediaTypeSearch = mediaType != null ? '&type=' + mediaType : '';
 
-    plot =
-      typeOfPlot != null
-        ? '&plot='.concat(typeOfPlot)
-        : '&plot='.concat(PlotEnum.short);
-console.log(plot);
-    return { seasonSearch, episodeSearch, mediaTypeSearch, plot };
+    if (typeOfPlot !== null && typeOfPlot !== undefined) {
+      plotSearch = '&plot='.concat(typeOfPlot);
+    } else {
+      plotSearch = '&plot='.concat(PlotEnum.short.toString());
+    }
+    console.log(plotSearch);
+    return { seasonSearch, episodeSearch, mediaTypeSearch, plotSearch };
   }
 }

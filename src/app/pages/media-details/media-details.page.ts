@@ -41,7 +41,7 @@ export class MediaDetailsPage implements OnInit {
           this.setFavorisButton(mediaDetailFromRest);
         },
         err => {
-          console.log(err);
+          console.error(err);
         }
       );
     this.linkPoster = this.restApi.getposterLink(this.imdb, '1000');
@@ -72,10 +72,6 @@ export class MediaDetailsPage implements OnInit {
         );
       }
     }
-  }
-
-  test(imdbID: string) {
-    this.restApi.getPoster(imdbID).subscribe(rest => {});
   }
 
   transformeSeasonNbrIntoArray(seasonNbr: string): string[] {
